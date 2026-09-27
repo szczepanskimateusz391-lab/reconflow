@@ -1,57 +1,57 @@
 # ReconFlow
 
-ReconFlow to lokalna aplikacja demonstracyjna do uzgadniania zamówień, płatności, dokumentów sprzedaży i zwrotów w e-commerce. Importuje cztery pliki CSV, oblicza wynik na wybrany moment i pokazuje sprawy wymagające sprawdzenia wraz z wyliczeniem oraz odwołaniem do wierszy źródłowych.
+ReconFlow is a local demo application for reconciling e-commerce orders, payments, sales documents, and returns. It imports four CSV files, calculates the position as of a selected time, and presents cases that need review with calculations and references to source rows.
 
-**Wszystkie dołączone dane, decyzje na zrzutach i wyniki demonstracyjne są syntetyczne.** Projekt nie jest przygotowany do pracy na danych produkcyjnych.
+**All included data, decisions shown in screenshots, and demo results are synthetic.** The project is not prepared for production data.
 
-## Problem i działanie
+## The problem and how ReconFlow works
 
-Dane dotyczące jednego zamówienia często znajdują się w kilku eksportach. Samo znalezienie powiązanej płatności nie wystarcza: może być częściowa, oczekująca, w innej walucie albo wykonana już po dacie analizy. ReconFlow rozdziela identyfikację powiązania od oceny kwoty i statusu transakcji.
+Information about one order often lives in several exports. Finding a related payment is not enough: it may be partial, pending, in another currency, or completed after the analysis date. ReconFlow separates identifying a relationship from checking the transaction amount and status.
 
-- Import sprawdza schematy CSV i zapisuje odrzucone wiersze z przyczyną. Identyczny rekord pomija, a zmieniony rekord o tym samym kluczu zgłasza jako konflikt bez nadpisania.
-- Uzgadnianie używa identyfikatora zamówienia razem z systemem źródłowym. Bez jednoznacznego odwołania pokazuje kandydatów do ręcznej decyzji; wynik reguł nie jest procentem pewności.
-- Podsumowanie oddziela wykryte różnice kwotowe, kwoty wymagające wyjaśnienia i wypłaty wymagające osobnego procesu. Waluty są prezentowane osobno, bez automatycznego przewalutowania.
-- Kolejka łączy powiązane ustalenia w przypadki operacyjne. Można zapisać powiązanie, status i komentarz, przejrzeć historię oraz wyeksportować widoczne przypadki do CSV.
+- Import validates the CSV schemas and records rejected rows with reasons. It skips identical records and reports a changed record with the same source key as a conflict without overwriting it.
+- Reconciliation uses both the order ID and its source system. Without an unambiguous reference, it presents candidates for manual review; the rule score is not a confidence percentage.
+- The summary separates detected amount differences, amounts needing investigation, and payouts requiring a separate process. Currencies are shown separately, without automatic conversion.
+- The queue groups related findings into operational cases. Users can save a link, status, and comment, review the decision history, and export the cases visible under the current filters to CSV.
 
-Na przykład A-101 ma wartość `150,00 PLN` i zakończoną wpłatę `100,00 PLN`, więc pozostaje `50,00 PLN` niedopłaty. Status „Rozwiązany” zamyka obsługę sprawy, ale sam nie usuwa tej różnicy ani nie potwierdza odzyskania pieniędzy.
+For example, order A-101 is worth `150.00 PLN` and has a completed payment of `100.00 PLN`, leaving a `50.00 PLN` underpayment. Marking the case as resolved closes its handling; it does not itself remove the difference or confirm that money has been recovered.
 
-## Zrzuty
+## Screenshots
 
-Zrzuty pochodzą z osobnej bazy PostgreSQL z danymi syntetycznymi; pokazują rzeczywisty interfejs, nie atrapę. Nie są dowodem uruchomienia całego zestawu Playwright przeciw Docker Compose.
+These screenshots come from a separate PostgreSQL database with synthetic data. They show the running application, not mock-ups. They do not demonstrate that the full Playwright suite was run against Docker Compose. The application interface shown in them is in Polish.
 
-| Widok | Zrzut |
+| View | Screenshot |
 | --- | --- |
-| Przegląd wyników i kwoty według waluty | [Podsumowanie](docs/portfolio/screenshots/reconflow-podsumowanie.png) |
-| Kolejka przypadków | [Problemy](docs/portfolio/screenshots/reconflow-kolejka.png) |
-| A-101: wyliczenie, źródła i historia decyzji | [Szczegóły A-101](docs/portfolio/screenshots/reconflow-niedoplata-50.png) |
+| Results overview and amounts by currency | [Overview](docs/portfolio/screenshots/reconflow-podsumowanie.png) |
+| Case queue | [Cases](docs/portfolio/screenshots/reconflow-kolejka.png) |
+| A-101: calculation, sources, and decision history | [A-101 details](docs/portfolio/screenshots/reconflow-niedoplata-50.png) |
 
-## Uruchomienie przez Docker
+## Run with Docker
 
-Wymagane są Docker Desktop z działającym silnikiem i wtyczką Compose. W katalogu głównym projektu uruchom:
+You need Docker Desktop with a running engine and the Compose plugin. From the project root, run:
 
 ```bash
 docker compose up --build
 ```
 
-Po osiągnięciu stanu `healthy` otwórz [aplikację](http://127.0.0.1:8080) lub [dokumentację API](http://127.0.0.1:8000/docs). Compose uruchamia PostgreSQL, migracje Alembic, FastAPI i frontend nginx. Porty są domyślnie przypięte do `127.0.0.1`; baza używa trwałego wolumenu. `docker compose stop` zatrzymuje usługi bez usuwania danych. Nie używaj `down -v`, jeśli chcesz zachować wolumen.
+Once the services are `healthy`, open the [application](http://127.0.0.1:8080) or the [API documentation](http://127.0.0.1:8000/docs). Compose starts PostgreSQL, Alembic migrations, FastAPI, and the nginx frontend. Ports bind to `127.0.0.1` by default, and the database uses a persistent volume. `docker compose stop` stops the services without deleting data. Do not use `down -v` if you want to keep the volume.
 
-Demonstracyjne hasło bazy zapisane w `docker-compose.yml` służy wyłącznie do lokalnego uruchomienia. Porty można zmienić przez `BACKEND_PORT` i `FRONTEND_PORT`; tolerancję kwot, termin dokumentu i wymagane typy dokumentów konfiguruje się w Compose. Publiczne wdrożenie wymagałoby osobnej konfiguracji bezpieczeństwa.
+The demo database password in `docker-compose.yml` is only for local use. You can change the ports with `BACKEND_PORT` and `FRONTEND_PORT`; the amount tolerance, document deadline, and required document types are configured in Compose. Public deployment would require separate security configuration.
 
-### Krótka ścieżka przez demo
+### Short demo walkthrough
 
-1. W **Importach** wgraj kolejno `demo-data/orders.csv`, `payments.csv`, `documents.csv` i `returns.csv`. Liczniki pokażą dodane, pominięte i odrzucone rekordy. Ponowny import tego samego pliku nie tworzy duplikatów.
-2. W **Przeglądzie** uruchom uzgadnianie dla historycznego momentu danych demo: `2025-02-15 12:00 UTC` (`13:00` w Warszawie). Pole formularza pokazuje lokalny czas **następnej** analizy, a podsumowanie datę **ostatniego** wyniku.
-3. W **Problemach** otwórz A-101. Sprawdź `150,00 − 100,00 = 50,00 PLN`, termin, dokument i wiersze źródłowe. Jeśli sprawa ma już status „Rozwiązany”, wybierz filtr obejmujący zamknięte przypadki.
-4. Na świeżej bazie demonstracyjnej zapisz status i komentarz. Po ponownej analizie historia decyzji zostaje, a niedopłata pozostaje w wyniku finansowym, dopóki dane płatności jej nie usuną. Eksport CSV obejmuje widoczne po filtrach przypadki; jeden wiersz oznacza jeden przypadek operacyjny.
+1. Under **Importy** (Imports), upload `demo-data/orders.csv`, `payments.csv`, `documents.csv`, and `returns.csv` in that order. The counters show added, skipped, and rejected records. Importing the same file again does not create duplicates.
+2. Under **Przegląd** (Overview), run reconciliation for the historical demo time: `2025-02-15 12:00 UTC` (`13:00` in Warsaw). The form shows the local time for the **next** analysis; the summary shows the date of the **latest result**.
+3. Under **Problemy** (Cases), open A-101. Check `150.00 − 100.00 = 50.00 PLN`, the due date, document, and source rows. If the case is already marked **Rozwiązany** (Resolved), choose a filter that includes closed cases.
+4. On a fresh demo database, save a status and comment. After another reconciliation, the decision history remains, and the underpayment stays in the financial result until payment data resolves it. The CSV export contains cases visible under the current filters; one row represents one operational case.
 
-Przykładowy konflikt identyfikatora bez nadpisania można sprawdzić plikiem `demo-data/conflicting-order.csv`. Schematy i znaczenie pól opisuje [kontrakt CSV](docs/csv-schemas.md), a ręcznie ustalone oczekiwania — [przypadki testowe](docs/manual-cases.md).
+You can test an identifier conflict without overwriting the original record using `demo-data/conflicting-order.csv`. See the [CSV schema contract](docs/csv-schemas.md) for field definitions and the [manually specified test cases](docs/manual-cases.md) for expected results. These supporting documents are in Polish.
 
-## Testy i potwierdzony zakres
+## Tests and verified scope
 
-Zależności są przypięte w `backend/requirements*.lock` i `frontend/pnpm-lock.yaml`. Dla lokalnych testów na Windows potrzebne są Python 3.12, Node.js z Corepack/pnpm oraz PostgreSQL 18 z narzędziami w `PATH` lub ścieżką `RECONFLOW_POSTGRES_BIN`. Testy zmieniają wyłącznie dedykowane bazy; nie uruchamiaj ich przeciw bazie z własnymi decyzjami.
+Dependencies are pinned in `backend/requirements*.lock` and `frontend/pnpm-lock.yaml`. Local testing on Windows requires Python 3.12, Node.js with Corepack/pnpm, and PostgreSQL 18 with its tools on `PATH` or specified through `RECONFLOW_POSTGRES_BIN`. Tests modify only dedicated databases; do not run them against a database containing your own decisions.
 
 ```powershell
-# Z katalogu głównego projektu
+# From the project root
 cd backend
 py -3.12 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements-dev.lock
@@ -68,28 +68,28 @@ pnpm exec playwright install chromium
 pnpm run test:e2e:standalone
 ```
 
-`test:e2e:standalone` uruchamia osobny klaster PostgreSQL, API i Vite. Przed importem test sprawdza znacznik instancji testowej. Zestaw integracyjny PostgreSQL uruchamia osobny klaster i sprawdza również równoczesne próby przypisania jednej transakcji. Szczegóły środowisk i poleceń są w [raporcie audytu](docs/final-audit.md).
+`test:e2e:standalone` starts a separate PostgreSQL cluster, API, and Vite instance. Before importing, the test checks that it is connected to the test instance. The PostgreSQL integration suite also starts a separate cluster and checks concurrent attempts to assign one transaction. Environment details and commands are recorded in the [audit report](docs/final-audit.md), which is in Polish.
 
-| Kontrola | Rzeczywisty wynik | Zakres |
+| Check | Actual result | Scope |
 | --- | --- | --- |
-| Backend, 18.09.2026 | `30 passed, 4 skipped` | Pominięte testy wymagały dedykowanego PostgreSQL i przeszły osobno. |
-| Integracja PostgreSQL, 18.09.2026 | `4 passed` | Import, `NUMERIC`, granice dat i konflikt równoczesnych przypisań. |
-| Pełny lokalny przebieg Playwright, 21.09.2026 | `5 passed` | Osobna baza PostgreSQL, nie Compose. Ten historyczny przebieg poprzedza nowy test importu. |
-| Izolowany Docker Compose, 20.09.2026 | PASS | Build, migracje, healthchecki, cztery importy, analiza, decyzja i trwałość po restarcie. |
-| Komunikat ponownego importu, 26.09.2026 | `1 passed` | Jeden wybrany test Playwright na osobnym Compose: `skipped_count=0` bez komunikatu i `skipped_count=1` z komunikatem. [Pierwszy](docs/evidence/import-skipped-first.png) i [drugi](docs/evidence/import-skipped-repeat.png) zrzut. |
-| Build frontendu kopii publikacyjnej, 26.09.2026 | PASS | `docker compose -p reconflow-public-prep build frontend`; TypeScript i Vite zakończyły się bez błędu. |
-| **Pełny zestaw Playwright przeciw Compose** | **NOT RUN** | Nie należy utożsamiać go z pojedynczym testem importu ani z lokalnym przebiegiem na PostgreSQL. |
+| Backend, 18 Sep 2026 | `30 passed, 4 skipped` | The skipped tests required a dedicated PostgreSQL instance and passed separately. |
+| PostgreSQL integration, 18 Sep 2026 | `4 passed` | Import, `NUMERIC` precision, date boundaries, and concurrent assignment conflict. |
+| Full local Playwright run, 21 Sep 2026 | `5 passed` | Separate PostgreSQL database, not Compose. This earlier run predates the new import-message test. |
+| Isolated Docker Compose, 20 Sep 2026 | PASS | Build, migrations, health checks, four imports, reconciliation, decision, and persistence after restart. |
+| Reimport message, 26 Sep 2026 | `1 passed` | One selected Playwright test on separate Compose: `skipped_count=0` without the message and `skipped_count=1` with it. [First](docs/evidence/import-skipped-first.png) and [second](docs/evidence/import-skipped-repeat.png) screenshots. |
+| Publication-copy frontend build, 26 Sep 2026 | PASS | `docker compose -p reconflow-public-prep build frontend`; TypeScript and Vite completed without errors. |
+| **Full Playwright suite against Compose** | **NOT RUN** | Neither the single import test nor the local PostgreSQL run should be presented as this check. |
 
-Generator 10 000 syntetycznych zamówień ma stały seed i niezależne pliki oczekiwanych powiązań oraz alertów. [Wyniki pomiaru](docs/benchmark-results.json) dotyczą kontrolowanego zbioru i harnessu SQLite, **nie** wydajności PostgreSQL ani danych rzeczywistych. Nie stanowią prognozy odzyskanych środków czy oszczędności czasu.
+The generator creates 10,000 synthetic orders with a fixed seed and independent files of expected links and alerts. The [benchmark results](docs/benchmark-results.json) are for a controlled dataset and a SQLite harness, **not** PostgreSQL performance or real-world data. They do not predict recovered funds or time savings.
 
-## Struktura i ograniczenia
+## Project structure and limitations
 
-- `backend/`: FastAPI, reguły uzgadniania, SQLAlchemy, migracje Alembic i Pytest;
-- `frontend/`: React, TypeScript, Vite, Tailwind CSS i testy Playwright;
-- `demo-data/`: syntetyczne pliki demonstracyjne;
-- `docs/`: schematy CSV, przypadki, audyt i zrzuty;
-- `scripts/`: generator danych i pomiar.
+- `backend/`: FastAPI, reconciliation rules, SQLAlchemy, Alembic migrations, and Pytest;
+- `frontend/`: React, TypeScript, Vite, Tailwind CSS, and Playwright tests;
+- `demo-data/`: synthetic demo files;
+- `docs/`: CSV schemas, test cases, audit, and screenshots;
+- `scripts/`: data generator and benchmark.
 
-To MVP dla jednej firmy demonstracyjnej, bez logowania, ról, integracji bankowych lub marketplace, automatycznego przewalutowania, księgowania i działań w zewnętrznych systemach. Zbiorcze wypłaty marketplace, prowizje i konflikty walut wymagają osobnego procesu. Przed użyciem produkcyjnym potrzebne byłyby m.in. kontrola dostępu, ochrona danych, wdrożeniowa konfiguracja sekretów i walidacja na rzeczywistych danych.
+This is an MVP for one demo company, without login, roles, bank or marketplace integrations, automatic currency conversion, bookkeeping, or actions in external systems. Batched marketplace payouts, fees, and currency conflicts require a separate process. Production use would require, among other things, access control, data protection, deployment-specific secret configuration, and validation on real data.
 
-Repozytorium nie określa obecnie licencji na kod aplikacji. Zależności zachowują własne licencje i informacje o autorach; ich nazwy oraz wersje znajdują się w plikach zależności i blokad.
+This repository does not currently specify a license for the application code. Dependencies retain their own licenses and author information; their names and versions are listed in the dependency and lock files.
