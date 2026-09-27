@@ -33,7 +33,24 @@ You need Docker Desktop with a running engine and the Compose plugin. From the p
 docker compose up --build
 ```
 
-Once the services are `healthy`, open the [application](http://127.0.0.1:8080) or the [API documentation](http://127.0.0.1:8000/docs). Compose starts PostgreSQL, Alembic migrations, FastAPI, and the nginx frontend. Ports bind to `127.0.0.1` by default, and the database uses a persistent volume. `docker compose stop` stops the services without deleting data. Do not use `down -v` if you want to keep the volume.
+These are **local addresses, not a hosted online demo**. Opening this README on GitHub does not start the application. Only after Docker Desktop reports that its engine is running and the Compose services are healthy, open these addresses on the **same computer**:
+
+- Application: `http://127.0.0.1:8080`
+- API documentation: `http://127.0.0.1:8000/docs`
+
+If the browser reports `ERR_CONNECTION_REFUSED`, run `docker version` to check that the Docker engine is available, then `docker compose ps` in the project root to check the services and their ports. Run `docker compose up --build` if they are not running. The links cannot work from GitHub alone or from another computer without a separate deployment.
+
+On Windows, first open Docker Desktop and wait for **Engine running**. If PowerShell does not recognize `docker`, a per-user Docker Desktop installation can be called without changing `PATH`:
+
+```powershell
+$docker = Join-Path $env:LOCALAPPDATA 'Programs\DockerDesktop\resources\bin\docker.exe'
+& $docker version
+& $docker compose up --build
+```
+
+Run these commands from the project root. Keep Compose running while using the local addresses above. If your Docker Desktop installation is elsewhere, use its `docker.exe` path instead.
+
+Compose starts PostgreSQL, Alembic migrations, FastAPI, and the nginx frontend. Ports bind to `127.0.0.1` by default, and the database uses a persistent volume. `docker compose stop` stops the services without deleting data. Do not use `down -v` if you want to keep the volume.
 
 The demo database password in `docker-compose.yml` is only for local use. You can change the ports with `BACKEND_PORT` and `FRONTEND_PORT`; the amount tolerance, document deadline, and required document types are configured in Compose. Public deployment would require separate security configuration.
 
