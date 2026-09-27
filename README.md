@@ -27,30 +27,34 @@ These screenshots come from a separate PostgreSQL database with synthetic data. 
 
 ## Run with Docker
 
-You need Docker Desktop with a running engine and the Compose plugin. From the project root, run:
+You need Docker Desktop with a running engine and the Compose plugin. From the project root, use a distinct project name to keep this checkout and its database volume separate from any other ReconFlow instance. The local check on 27 Sep 2026 used:
 
 ```bash
-docker compose up --build
+docker compose -p reconflow-readme-demo up --build -d
+docker compose -p reconflow-readme-demo ps
 ```
+
+That isolated project starts with its own, initially empty PostgreSQL database; import the synthetic CSV files to see reconciliation results. Reuse the same `-p` value for later `ps`, `stop`, and `up` commands.
 
 These are **local addresses, not a hosted online demo**. Opening this README on GitHub does not start the application. Only after Docker Desktop reports that its engine is running and the Compose services are healthy, open these addresses on the **same computer**:
 
-- Application: `http://127.0.0.1:8080`
-- API documentation: `http://127.0.0.1:8000/docs`
+- Application: [http://127.0.0.1:8080](http://127.0.0.1:8080)
+- API documentation: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
-If the browser reports `ERR_CONNECTION_REFUSED`, run `docker version` to check that the Docker engine is available, then `docker compose ps` in the project root to check the services and their ports. Run `docker compose up --build` if they are not running. The links cannot work from GitHub alone or from another computer without a separate deployment.
+If the browser reports `ERR_CONNECTION_REFUSED`, run `docker version` to check that the Docker engine is available, then `docker compose -p reconflow-readme-demo ps` in the project root to check this isolated project's services and ports. Start them with the same project name if needed. The links cannot work from GitHub alone or from another computer without a separate deployment. Ports `8080` and `8000` must be free; if you override `FRONTEND_PORT` or `BACKEND_PORT`, use those selected ports in the URLs.
 
 On Windows, first open Docker Desktop and wait for **Engine running**. If PowerShell does not recognize `docker`, a per-user Docker Desktop installation can be called without changing `PATH`:
 
 ```powershell
 $docker = Join-Path $env:LOCALAPPDATA 'Programs\DockerDesktop\resources\bin\docker.exe'
 & $docker version
-& $docker compose up --build
+& $docker compose -p reconflow-readme-demo up --build -d
+& $docker compose -p reconflow-readme-demo ps
 ```
 
 Run these commands from the project root. Keep Compose running while using the local addresses above. If your Docker Desktop installation is elsewhere, use its `docker.exe` path instead.
 
-Compose starts PostgreSQL, Alembic migrations, FastAPI, and the nginx frontend. Ports bind to `127.0.0.1` by default, and the database uses a persistent volume. `docker compose stop` stops the services without deleting data. Do not use `down -v` if you want to keep the volume.
+Compose starts PostgreSQL, Alembic migrations, FastAPI, and the nginx frontend. Ports bind to `127.0.0.1` by default, and the database uses a persistent volume. `docker compose -p reconflow-readme-demo stop` stops these services without deleting data. Do not use `down -v` if you want to keep the volume.
 
 The demo database password in `docker-compose.yml` is only for local use. You can change the ports with `BACKEND_PORT` and `FRONTEND_PORT`; the amount tolerance, document deadline, and required document types are configured in Compose. Public deployment would require separate security configuration.
 
@@ -95,6 +99,7 @@ pnpm run test:e2e:standalone
 | Isolated Docker Compose, 20 Sep 2026 | PASS | Build, migrations, health checks, four imports, reconciliation, decision, and persistence after restart. |
 | Reimport message, 26 Sep 2026 | `1 passed` | One selected Playwright test on separate Compose: `skipped_count=0` without the message and `skipped_count=1` with it. [First](docs/evidence/import-skipped-first.png) and [second](docs/evidence/import-skipped-repeat.png) screenshots. |
 | Publication-copy frontend build, 26 Sep 2026 | PASS | `docker compose -p reconflow-public-prep build frontend`; TypeScript and Vite completed without errors. |
+| Isolated local launch from this checkout, 27 Sep 2026 | PASS | `docker compose -p reconflow-readme-demo up --build -d`; migrations `0001` and `0002`, all three services healthy, HTTP 200 from the application, proxied `/api/health`, and API docs. The browser displayed ReconFlow and Swagger UI. This fresh database was not populated or used for a full workflow test. |
 | **Full Playwright suite against Compose** | **NOT RUN** | Neither the single import test nor the local PostgreSQL run should be presented as this check. |
 
 The generator creates 10,000 synthetic orders with a fixed seed and independent files of expected links and alerts. The [benchmark results](docs/benchmark-results.json) are for a controlled dataset and a SQLite harness, **not** PostgreSQL performance or real-world data. They do not predict recovered funds or time savings.
