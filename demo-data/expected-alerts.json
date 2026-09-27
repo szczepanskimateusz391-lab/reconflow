@@ -1,0 +1,25 @@
+{
+  "analysis_at": "2025-02-15T12:00:00Z",
+  "expected_active_alerts": [
+    {"type": "underpayment_overdue", "source_key": "shop-a/A-101"},
+    {"type": "partial_refund", "source_key": "shop-a/R-103"},
+    {"type": "missing_payment_overdue", "source_key": "shop-a/A-105"},
+    {"type": "ambiguous_match", "source_key": "shop-a/P-AMB"},
+    {"type": "currency_conflict", "source_key": "shop-a/P-108"},
+    {"type": "missing_payment_overdue", "source_key": "shop-a/A-108"},
+    {"type": "suspected_duplicate_payment", "source_key": "shop-a/A-109"},
+    {"type": "refund_exceeds_expected", "source_key": "shop-a/R-110"},
+    {"type": "refund_overdue", "source_key": "shop-a/R-111"},
+    {"type": "missing_expected_document", "source_key": "shop-a/A-112"},
+    {"type": "overpayment", "source_key": "shop-a/A-113"},
+    {"type": "separate_process_required", "source_key": "marketplace-x/PAYOUT-1"},
+    {"type": "unmatched_transaction", "source_key": "bank/P-UNKNOWN"},
+    {"type": "document_without_order", "source_key": "shop-a/D-ORPHAN"}
+  ],
+  "notes": [
+    "The pending payment for A-104 is not an overdue payment at the analysis time.",
+    "A-102 is balanced through two partial payments.",
+    "The same order number A-100 in shop-a and shop-b remains distinct.",
+    "P-AMB is not automatically linked because two candidates have the same best rule score."
+  ]
+}

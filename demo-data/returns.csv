@@ -1,0 +1,4 @@
+source_system,return_id,order_ref,order_source_system,return_date,status,expected_refund_amount,currency,refund_due_date,correction_ref
+shop-a,R-103,A-103,shop-a,2025-01-15,approved,40.00,PLN,2025-01-20,K-103
+shop-a,R-110,A-110,shop-a,2025-01-15,approved,20.00,PLN,2025-01-20,K-110
+shop-a,R-111,A-111,shop-a,2025-01-15,approved,15.00,PLN,2025-01-20,K-111

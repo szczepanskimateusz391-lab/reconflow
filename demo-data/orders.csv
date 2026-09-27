@@ -1,0 +1,16 @@
+source_system,order_id,sales_channel,order_date,due_date,status,gross_amount,currency,customer_name,customer_email
+shop-a,A-100,web,2025-01-02,2025-01-10,completed,100.00,PLN,Jan Nowak,jan.nowak@example.test
+shop-a,A-101,web,2025-01-02,2025-01-10,completed,150.00,PLN,Ewa Lis,ewa.lis@example.test
+shop-a,A-102,web,2025-01-03,2025-01-12,completed,200.00,PLN,Piotr Wrona,piotr.wrona@example.test
+shop-a,A-103,web,2025-01-03,2025-01-12,completed,100.00,PLN,Ala Kot,ala.kot@example.test
+shop-a,A-104,web,2025-02-10,2025-03-01,confirmed,80.00,PLN,Marek Kruk,marek.kruk@example.test
+shop-a,A-105,web,2025-01-04,2025-01-12,completed,70.00,PLN,Ola Rak,ola.rak@example.test
+shop-a,A-106,web,2025-02-10,2025-03-01,confirmed,120.00,PLN,Anna Kowalska,anna.one@example.test
+shop-a,A-107,web,2025-02-10,2025-03-01,confirmed,120.00,PLN,Anna Kowalska,anna.two@example.test
+shop-b,A-100,marketplace,2025-01-05,2025-01-15,completed,55.00,PLN,Tomasz Gil,tomasz.gil@example.test
+shop-a,A-108,web,2025-01-05,2025-01-15,completed,100.00,EUR,Iga Maj,iga.maj@example.test
+shop-a,A-109,web,2025-01-06,2025-01-15,completed,100.00,PLN,Lena Kos,lena.kos@example.test
+shop-a,A-110,web,2025-01-06,2025-01-15,completed,100.00,PLN,Adam Wilk,adam.wilk@example.test
+shop-a,A-111,web,2025-01-06,2025-01-15,completed,60.00,PLN,Nina Jeż,nina.jez@example.test
+shop-a,A-112,web,2025-01-06,2025-01-15,completed,90.00,PLN,Olga Lew,olga.lew@example.test
+shop-a,A-113,web,2025-01-06,2025-01-15,completed,100.00,PLN,Igor Sowa,igor.sowa@example.test

@@ -1,0 +1,56 @@
+name: reconflow
+
+services:
+  db:
+    image: postgres:17.2-alpine
+    environment:
+      POSTGRES_DB: reconflow
+      POSTGRES_USER: reconflow
+      POSTGRES_PASSWORD: reconflow
+    volumes:
+      - reconflow_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U reconflow -d reconflow"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      DATABASE_URL: postgresql+psycopg://reconflow:reconflow@db:5432/reconflow
+      AMOUNT_TOLERANCE: "0.01"
+      DOCUMENT_GRACE_DAYS: "3"
+      REQUIRED_DOCUMENT_TYPES: invoice,receipt
+      DEMO_MODE: "true"
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${BACKEND_PORT:-8000}:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${FRONTEND_PORT:-8080}:80"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1/"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+volumes:
+  reconflow_pgdata:

@@ -1,0 +1,144 @@
+{
+  "measured_at": "2026-09-14T18:30:04.959614+00:00",
+  "synthetic": true,
+  "seed": 20250914,
+  "analysis_at": "2025-04-30T12:00:00+00:00",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.14",
+    "database": "SQLite benchmark harness (production target: PostgreSQL 17.2)",
+    "processor": "AMD64 Family 23 Model 24 Stepping 1, AuthenticAMD"
+  },
+  "records": {
+    "orders": {
+      "imported": 10000,
+      "rejected": 0,
+      "conflicts": 0
+    },
+    "payments": {
+      "imported": 11069,
+      "rejected": 0,
+      "conflicts": 0
+    },
+    "documents": {
+      "imported": 10392,
+      "rejected": 0,
+      "conflicts": 0
+    },
+    "returns": {
+      "imported": 792,
+      "rejected": 0,
+      "conflicts": 0
+    }
+  },
+  "linking": {
+    "truth_links": 10969,
+    "automatic_assignments": 10657,
+    "correct_automatic_assignments": 10657,
+    "false_automatic_assignments": 0,
+    "automatic_link_precision": 1.0,
+    "automatic_handling_rate": 0.971556
+  },
+  "alerts": {
+    "expected_total": 3366,
+    "actual_total": 3366,
+    "by_type": {
+      "currency_conflict": {
+        "expected": 192,
+        "actual": 192,
+        "true_positive": 192,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "document_without_order": {
+        "expected": 20,
+        "actual": 20,
+        "true_positive": 20,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "missing_expected_document": {
+        "expected": 199,
+        "actual": 199,
+        "true_positive": 199,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "missing_payment_overdue": {
+        "expected": 1241,
+        "actual": 1241,
+        "true_positive": 1241,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "overpayment": {
+        "expected": 209,
+        "actual": 209,
+        "true_positive": 209,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "partial_refund": {
+        "expected": 208,
+        "actual": 208,
+        "true_positive": 208,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "refund_exceeds_expected": {
+        "expected": 87,
+        "actual": 87,
+        "true_positive": 87,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "refund_overdue": {
+        "expected": 204,
+        "actual": 204,
+        "true_positive": 204,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "separate_process_required": {
+        "expected": 50,
+        "actual": 50,
+        "true_positive": 50,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "suspected_duplicate_payment": {
+        "expected": 119,
+        "actual": 119,
+        "true_positive": 119,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "underpayment_overdue": {
+        "expected": 475,
+        "actual": 475,
+        "true_positive": 475,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "unmatched_transaction": {
+        "expected": 362,
+        "actual": 362,
+        "true_positive": 362,
+        "precision": 1.0,
+        "recall": 1.0
+      }
+    }
+  },
+  "timing_seconds": {
+    "csv_import": 15.858,
+    "reconciliation": 50.5591,
+    "total": 66.417
+  },
+  "run_metrics": {
+    "orders": 10000,
+    "payments": 11069,
+    "documents": 10392,
+    "returns": 792,
+    "automatic_reference_links": 10657
+  }
+}

@@ -1,0 +1,2 @@
+source_system,transaction_id,kind,status,transaction_date,amount,currency,title,order_ref,order_source_system,return_ref,original_payment_ref,processing_scope
+e2e-shop,P-101,payment,completed,2025-01-03,100.00,PLN,Order A-101,A-101,e2e-shop,,,direct

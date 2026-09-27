@@ -1,0 +1,21 @@
+source_system,transaction_id,kind,status,transaction_date,amount,currency,title,order_ref,order_source_system,return_ref,original_payment_ref,processing_scope
+shop-a,P-100,payment,completed,2025-01-03,100.00,PLN,Order A-100,A-100,shop-a,,,direct
+shop-a,P-101,payment,completed,2025-01-03,100.00,PLN,Order A-101,A-101,shop-a,,,direct
+shop-a,P-102-A,payment,completed,2025-01-04,60.00,PLN,First part A-102,A-102,shop-a,,,direct
+shop-a,P-102-B,payment,completed,2025-01-05,140.00,PLN,Second part A-102,A-102,shop-a,,,direct
+shop-a,P-103,payment,completed,2025-01-04,100.00,PLN,Order A-103,A-103,shop-a,,,direct
+shop-a,R-P-103,refund,completed,2025-01-18,20.00,PLN,Partial refund A-103,A-103,shop-a,R-103,P-103,direct
+shop-a,P-104,payment,pending,2025-02-12,80.00,PLN,Pending A-104,A-104,shop-a,,,direct
+shop-a,P-105,payment,failed,2025-01-06,70.00,PLN,Failed A-105,A-105,shop-a,,,direct
+shop-a,P-AMB,payment,completed,2025-02-11,120.00,PLN,Anna Kowalska,,,,,direct
+shop-b,P-100,payment,completed,2025-01-06,55.00,PLN,Order A-100,A-100,shop-b,,,direct
+shop-a,P-108,payment,completed,2025-01-07,100.00,PLN,Wrong currency A-108,A-108,shop-a,,,direct
+shop-a,P-109-A,payment,completed,2025-01-07,50.00,PLN,Order A-109 part,A-109,shop-a,,,direct
+shop-a,P-109-B,payment,completed,2025-01-07,50.00,PLN,Order A-109 part,A-109,shop-a,,,direct
+shop-a,P-110,payment,completed,2025-01-07,100.00,PLN,Order A-110,A-110,shop-a,,,direct
+shop-a,R-P-110,refund,completed,2025-01-19,25.00,PLN,Refund A-110,A-110,shop-a,R-110,P-110,direct
+shop-a,P-111,payment,completed,2025-01-07,60.00,PLN,Order A-111,A-111,shop-a,,,direct
+shop-a,P-112,payment,completed,2025-01-07,90.00,PLN,Order A-112,A-112,shop-a,,,direct
+shop-a,P-113,payment,completed,2025-01-07,105.00,PLN,Order A-113,A-113,shop-a,,,direct
+marketplace-x,PAYOUT-1,payment,completed,2025-01-31,950.00,PLN,Marketplace payout net of fees,,,,,marketplace_payout
+bank,P-UNKNOWN,payment,completed,2025-01-08,999.00,PLN,Unknown transfer,,,,,direct

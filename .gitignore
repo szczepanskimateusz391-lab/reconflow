@@ -1,0 +1,61 @@
+# Secrets and machine-local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+secrets.json
+
+# Python
+.venv/
+venv/
+env/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+*.py[cod]
+
+# Node / frontend build and browser artifacts
+node_modules/
+frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
+*.tsbuildinfo
+frontend/vite.config.js
+frontend/vite.config.d.ts
+
+# Local databases and PostgreSQL clusters
+*.db
+*.sqlite
+*.sqlite3
+pgdata/
+postgres-data/
+postgres-*-cluster/
+**/postmaster.pid
+
+# Generated, temporary and local-only artifacts
+work/
+outputs/
+demo-data/generated/
+*.log
+*.tmp
+*.temp
+*.swp
+*.bak
+
+# Public copy keeps source documentation and screenshots, not raw audit logs.
+!docs/evidence/**/*.md
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini

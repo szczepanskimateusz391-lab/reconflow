@@ -1,0 +1,2 @@
+source_system,document_id,number,document_type,status,document_date,amount,currency,order_ref,order_source_system,original_document_ref
+e2e-shop,D-101,FV/101,invoice,issued,2025-01-02,150.00,PLN,A-101,e2e-shop,

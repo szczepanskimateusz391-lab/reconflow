@@ -1,0 +1,2 @@
+source_system,order_id,sales_channel,order_date,due_date,status,gross_amount,currency,customer_name,customer_email
+shop-a,A-100,web,2025-01-02,2025-01-10,completed,999.00,PLN,Jan Nowak,jan.nowak@example.test
