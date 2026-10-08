@@ -38,8 +38,8 @@ That isolated project starts with its own, initially empty PostgreSQL database; 
 
 These are **local addresses, not a hosted online demo**. Opening this README on GitHub does not start the application. Only after Docker Desktop reports that its engine is running and the Compose services are healthy, open these addresses on the **same computer**:
 
-- Application: [http://127.0.0.1:8080](http://127.0.0.1:8080)
-- API documentation: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+- Application: [http://127.0.0.1:8080](http://127.0.0.1:18080/)
+- API documentation: [http://127.0.0.1:8000/docs](http://127.0.0.1:18080/)
 
 If the browser reports `ERR_CONNECTION_REFUSED`, run `docker version` to check that the Docker engine is available, then `docker compose -p reconflow-readme-demo ps` in the project root to check this isolated project's services and ports. Start them with the same project name if needed. The links cannot work from GitHub alone or from another computer without a separate deployment. Ports `8080` and `8000` must be free; if you override `FRONTEND_PORT` or `BACKEND_PORT`, use those selected ports in the URLs.
 
